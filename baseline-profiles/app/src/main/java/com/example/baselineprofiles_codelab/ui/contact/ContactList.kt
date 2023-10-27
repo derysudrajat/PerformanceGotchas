@@ -10,17 +10,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.baselineprofiles_codelab.ui.components.JetsnackButton
 
 @Composable
 fun ContactList(
@@ -30,9 +25,6 @@ fun ContactList(
 ) {
 
     Box {
-        val sortedContacts = remember(contacts, comparator) {
-            contacts.sortedWith(comparator)
-        }
 
         val listState = rememberLazyListState()
 
@@ -42,16 +34,14 @@ fun ContactList(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = listState
         ) {
-            items(sortedContacts, key = { item -> item.id }) { contact ->
-                ContactItem(contact = contact, sortedContacts.first {
+            items(contacts.sortedWith(comparator)) { contact ->
+                ContactItem(contact = contact, contacts.sortedWith(comparator).first {
                     it.name.first().lowercase() == contact.name.first().lowercase()
                 }.id == contact.id)
             }
         }
 
-        val showButton by remember {
-            derivedStateOf { listState.firstVisibleItemIndex > 0 }
-        }
+        val showButton = listState.firstVisibleItemIndex > 0
 
         AnimatedVisibility(modifier = Modifier
             .align(Alignment.BottomEnd)

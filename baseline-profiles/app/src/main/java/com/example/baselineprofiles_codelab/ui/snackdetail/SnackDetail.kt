@@ -103,7 +103,7 @@ fun SnackDetail(
         val scroll = rememberScrollState(0)
         Header()
         Body(related, scroll)
-        Title(snack) { scroll.value }
+        Title(snack, scroll.value)
         Image(snack.imageUrl) { scroll.value }
         Up(upPress)
         CartBottomBar(modifier = Modifier.align(Alignment.BottomCenter))
@@ -238,20 +238,17 @@ private fun Body(
 }
 
 @Composable
-private fun Title(snack: Snack, scrollProvider: () -> Int) {
+private fun Title(snack: Snack, scroll: Int) {
     val maxOffset = with(LocalDensity.current) { MaxTitleOffset.toPx() }
     val minOffset = with(LocalDensity.current) { MinTitleOffset.toPx() }
+    val offset = with(LocalDensity.current) { scroll.toDp() }
 
     Column(
         verticalArrangement = Arrangement.Bottom,
         modifier = Modifier
             .heightIn(min = TitleHeight)
             .statusBarsPadding()
-            .offset {
-                val scroll = scrollProvider()
-                val offset = (maxOffset - scroll).coerceAtLeast(minOffset)
-                IntOffset(x = 0, y = offset.toInt())
-            }
+            .offset(y = offset)
             .background(color = JetsnackTheme.colors.uiBackground)
     ) {
         Spacer(Modifier.height(16.dp))
