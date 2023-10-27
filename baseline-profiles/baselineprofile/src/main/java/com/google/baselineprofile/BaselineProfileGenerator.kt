@@ -1,5 +1,7 @@
 package com.google.baselineprofile
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,6 +32,7 @@ import org.junit.runner.RunWith
  *
  * After you run the generator, you can verify the improvements running the [StartupBenchmarks] benchmark.
  **/
+@RequiresApi(Build.VERSION_CODES.P)
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class BaselineProfileGenerator {
